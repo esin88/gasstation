@@ -35,9 +35,9 @@ public class GasStationImpl implements GasStation {
     @NotNull
     private final AtomicInteger cancellationsTooExpensiveCounter = new AtomicInteger(0);
 
-    public GasStationImpl() {
+    public GasStationImpl(double defaultPrice) {
         for (int i = 0; i < GasType.values().length; i++) {
-            gasPrices[i] = new AtomicDouble(0d);
+            gasPrices[i] = new AtomicDouble(defaultPrice);
             workerManagers[i] = new PumpWorkerManager();
         }
     }

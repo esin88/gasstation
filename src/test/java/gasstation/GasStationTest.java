@@ -35,10 +35,9 @@ public final class GasStationTest {
 
     @Before
     public void setup() {
-        station = new GasStationImpl();
+        station = new GasStationImpl(regularPrice);
         regularPump = new GasPump(GasType.REGULAR, pumpGasAmount);
         station.addGasPump(regularPump);
-        station.setPrice(GasType.REGULAR, regularPrice);
     }
 
     @Test

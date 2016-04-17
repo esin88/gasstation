@@ -20,7 +20,14 @@ public final class GasStationSmokeTest {
     @SuppressWarnings({"MagicNumber", "TooBroadScope"})
     @Test
     public void smokeTest() throws InterruptedException {
-        final GasStation station = new GasStationImpl();
+        final GasStation station = new GasStationImpl(1d);
+
+        final double regularPrice = 1.1d;
+        final double dieselPrice = 2.2d;
+        final double superPrice = 3.3d;
+        station.setPrice(GasType.REGULAR, regularPrice);
+        station.setPrice(GasType.DIESEL, dieselPrice);
+        station.setPrice(GasType.SUPER, superPrice);
 
         final int pumpGasStartAmount = 10;
         final int pumpsOfEachType = 2;
@@ -32,13 +39,6 @@ public final class GasStationSmokeTest {
             station.addGasPump(new GasPump(GasType.DIESEL, pumpGasStartAmount));
             station.addGasPump(new GasPump(GasType.SUPER, pumpGasStartAmount));
         }
-
-        final double regularPrice = 1.1d;
-        final double dieselPrice = 2.2d;
-        final double superPrice = 3.3d;
-        station.setPrice(GasType.REGULAR, regularPrice);
-        station.setPrice(GasType.DIESEL, dieselPrice);
-        station.setPrice(GasType.SUPER, superPrice);
 
         final ExecutorService buyerExecutor = Executors.newFixedThreadPool(30);
 
