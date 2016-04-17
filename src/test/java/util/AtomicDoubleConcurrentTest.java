@@ -9,7 +9,6 @@ import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
-import java.util.concurrent.atomic.AtomicLong;
 
 import static util.GasStationTestHelper.assertEquals;
 
@@ -25,11 +24,11 @@ public class AtomicDoubleConcurrentTest {
 
     @Test
     public void testConcurrent() throws InterruptedException {
-        final AtomicLong value = new AtomicLong(0);
+        final AtomicDouble value = new AtomicDouble(3.3d);
         final ExecutorService adderExecutor = Executors.newFixedThreadPool(10);
-        final Runnable adder = () -> value.getAndAdd(10);
+        final Runnable adder = () -> value.add(4.4d);
         final ExecutorService subtractorExecutor = Executors.newFixedThreadPool(10);
-        final Runnable subtractor = () -> value.getAndAdd(-10);
+        final Runnable subtractor = () -> value.subtract(4.4d);
 
         for (int i = 0; i < 1000; i++) {
             adderExecutor.execute(adder);
@@ -39,6 +38,6 @@ public class AtomicDoubleConcurrentTest {
         subtractorExecutor.shutdown();
         adderExecutor.awaitTermination(10, TimeUnit.MINUTES);
         subtractorExecutor.awaitTermination(10, TimeUnit.MINUTES);
-        assertEquals(0, value.get());
+        assertEquals(3.3d, value.get());
     }
 }

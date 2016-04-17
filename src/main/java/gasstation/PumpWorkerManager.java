@@ -36,7 +36,7 @@ final class PumpWorkerManager {
         return workers.poll();
     }
 
-    public void addWorker(@NotNull PumpWorker worker) {
+    void addWorker(@NotNull PumpWorker worker) {
         workers.add(worker);
     }
 

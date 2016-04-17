@@ -6,6 +6,7 @@ import net.bigpoint.assessment.gasstation.GasType;
 import net.bigpoint.assessment.gasstation.exceptions.GasTooExpensiveException;
 import net.bigpoint.assessment.gasstation.exceptions.NotEnoughGasException;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import util.AtomicDouble;
 
 import java.util.LinkedList;
@@ -42,7 +43,10 @@ public class GasStationImpl implements GasStation {
     }
 
     @Override
-    public void addGasPump(GasPump pump) {
+    public void addGasPump(@Nullable GasPump pump) {
+        if (pump == null) {
+            throw new IllegalArgumentException("Gas pump is null");
+        }
         workerManagers[pump.getGasType().ordinal()].addWorker(new PumpWorker(pump));
         allPumps.add(pump);
     }
@@ -54,7 +58,11 @@ public class GasStationImpl implements GasStation {
     }
 
     @Override
-    public double buyGas(GasType type, double amountInLiters, double maxPricePerLiter) throws NotEnoughGasException, GasTooExpensiveException {
+    public double buyGas(@Nullable GasType type, double amountInLiters, double maxPricePerLiter) throws NotEnoughGasException, GasTooExpensiveException {
+        if (type == null) {
+            throw new IllegalArgumentException("Gas type is null");
+        }
+
         final double price = getPrice(type);
         if (price > maxPricePerLiter) {
             cancellationsTooExpensiveCounter.getAndIncrement();
@@ -99,12 +107,21 @@ public class GasStationImpl implements GasStation {
     }
 
     @Override
-    public double getPrice(GasType type) {
+    public double getPrice(@Nullable GasType type) {
+        if (type == null) {
+            throw new IllegalArgumentException("Gas type is null");
+        }
         return gasPrices[type.ordinal()].get();
     }
 
     @Override
-    public void setPrice(GasType type, double price) {
+    public void setPrice(@Nullable GasType type, double price) {
+        if (type == null) {
+            throw new IllegalArgumentException("Gas type is null");
+        }
+        if (price <= 0) {
+            throw new IllegalArgumentException("Price must be > 0");
+        }
         gasPrices[type.ordinal()].set(price);
     }
 }

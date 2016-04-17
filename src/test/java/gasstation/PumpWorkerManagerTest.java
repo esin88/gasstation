@@ -11,6 +11,7 @@ import static util.GasStationTestHelper.assertEquals;
  * Created by esin on 17.04.2016.
  */
 public final class PumpWorkerManagerTest {
+    @SuppressWarnings("MagicNumber")
     @Test
     public void testWorkerSorting() throws Exception {
         final PumpWorkerManager manager = new PumpWorkerManager();
