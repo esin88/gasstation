@@ -30,13 +30,25 @@ public final class PumpWorkerTest {
     }
 
     @Test
-    public void testguyGasFail() throws ExecutionException, InterruptedException {
+    public void testBuyGasNotEnoughFail() throws ExecutionException, InterruptedException {
         final double initialGasAmount = 100d;
         final PumpWorker worker = new PumpWorker(new GasPump(GasType.REGULAR, initialGasAmount));
 
-        expectedException.expectMessage("Not enough gas remaiend");
+        expectedException.expectMessage("Not enough gas remained");
         expectedException.expect(IllegalArgumentException.class);
         final Future<?> future = worker.scheduleBuyGas(initialGasAmount * 2);
+        future.get();
+        expectedException = ExpectedException.none();
+    }
+
+    @Test
+    public void testBuyGasIllegalAmountFail() throws ExecutionException, InterruptedException {
+        final double initialGasAmount = 100d;
+        final PumpWorker worker = new PumpWorker(new GasPump(GasType.REGULAR, initialGasAmount));
+
+        expectedException.expectMessage("Amount must be > 0");
+        expectedException.expect(IllegalArgumentException.class);
+        final Future<?> future = worker.scheduleBuyGas(0);
         future.get();
         expectedException = ExpectedException.none();
     }

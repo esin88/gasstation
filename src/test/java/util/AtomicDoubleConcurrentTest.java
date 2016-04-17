@@ -22,6 +22,7 @@ public class AtomicDoubleConcurrentTest {
         return Arrays.asList(new Object[100][0]);
     }
 
+    @SuppressWarnings("MagicNumber")
     @Test
     public void testConcurrent() throws InterruptedException {
         final AtomicDouble value = new AtomicDouble(3.3d);

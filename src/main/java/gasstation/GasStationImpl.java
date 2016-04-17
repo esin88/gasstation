@@ -62,7 +62,6 @@ public class GasStationImpl implements GasStation {
         if (type == null) {
             throw new IllegalArgumentException("Gas type is null");
         }
-
         final double price = getPrice(type);
         if (price > maxPricePerLiter) {
             cancellationsTooExpensiveCounter.getAndIncrement();

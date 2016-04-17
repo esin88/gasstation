@@ -5,6 +5,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Comparator;
+import java.util.Queue;
 import java.util.concurrent.Future;
 import java.util.concurrent.PriorityBlockingQueue;
 
@@ -15,7 +16,7 @@ final class PumpWorkerManager {
     private static final int DEFAULT_PUMP_BY_TYPE_CAPACITY = 8;
 
     @NotNull
-    private final PriorityBlockingQueue<PumpWorker> workers = new PriorityBlockingQueue<>(
+    private final Queue<PumpWorker> workers = new PriorityBlockingQueue<>(
             DEFAULT_PUMP_BY_TYPE_CAPACITY,
             new GasPumpWorkerComparator());
 
@@ -23,7 +24,6 @@ final class PumpWorkerManager {
     synchronized Future<?> scheduleBuyGas(double amountInLiters) throws NotEnoughGasException {
         final PumpWorker worker = getWorkerWithLargestAmount();
         if (worker == null || worker.getRemainingGas() < amountInLiters) {
-
             throw new NotEnoughGasException();
         }
         final Future<?> future = worker.scheduleBuyGas(amountInLiters);

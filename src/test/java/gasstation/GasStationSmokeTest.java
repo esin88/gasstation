@@ -22,9 +22,9 @@ public final class GasStationSmokeTest {
     public void smokeTest() throws InterruptedException {
         final GasStation station = new GasStationImpl();
 
-        final int pumpGasStartAmount = 100;
-        final int pumpsOfEachType = 3;
-        final int buyAmount = 10;
+        final int pumpGasStartAmount = 10;
+        final int pumpsOfEachType = 2;
+        final int buyAmount = 1;
         final int buyIterations = pumpGasStartAmount * pumpsOfEachType / buyAmount;
 
         for (int i = 0; i < pumpsOfEachType; i++) {
