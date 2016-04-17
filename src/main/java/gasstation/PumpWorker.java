@@ -32,9 +32,6 @@ class PumpWorker {
 
     @NotNull
     Future<?> scheduleBuyGas(double amount) {
-        if (amount <= 0) {
-            throw new IllegalArgumentException("Amount must be > 0");
-        }
         if (remainingGas.get() < amount) {
             throw new IllegalArgumentException("Not enough gas remained");
         }

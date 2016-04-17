@@ -12,6 +12,8 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
+import java.util.Collection;
+
 import static util.GasStationTestHelper.assertEquals;
 
 /**
@@ -44,8 +46,27 @@ public final class GasStationTest {
         final double totalPrice = station.buyGas(GasType.REGULAR, pumpGasAmount, regularPrice);
 
         assertEquals(pumpGasAmount * regularPrice, totalPrice);
-        assertEquals(totalPrice, station.getRevenue());
+    }
+
+    @Test
+    public void testGetRevenue() throws NotEnoughGasException, GasTooExpensiveException {
+        final double price = station.buyGas(GasType.REGULAR, pumpGasAmount, regularPrice);
+        assertEquals(price, station.getRevenue());
+    }
+
+    @Test
+    public void testGetNumberOfSales() throws NotEnoughGasException, GasTooExpensiveException {
+        Assert.assertEquals(0, station.getNumberOfSales());
+        station.buyGas(GasType.REGULAR, pumpGasAmount, regularPrice);
         Assert.assertEquals(1, station.getNumberOfSales());
+    }
+
+    @Test
+    public void testBuyFailZeroAmount() throws NotEnoughGasException, GasTooExpensiveException {
+        expectedException.expectMessage("Amount must be > 0");
+        expectedException.expect(IllegalArgumentException.class);
+        station.buyGas(GasType.REGULAR, 0, regularPrice);
+        expectedException = ExpectedException.none();
     }
 
     @Test
@@ -67,5 +88,53 @@ public final class GasStationTest {
         expectedException.expect(NotEnoughGasException.class);
         station.buyGas(GasType.DIESEL, pumpGasAmount, regularPrice);
         expectedException = ExpectedException.none();
+    }
+
+    @Test
+    public void testSetPrice() {
+        station.setPrice(GasType.DIESEL, regularPrice * 2);
+        assertEquals(regularPrice * 2, station.getPrice(GasType.DIESEL));
+    }
+
+    @Test
+    public void testSetPriceFailNullType() {
+        expectedException.expectMessage("Gas type is null");
+        expectedException.expect(IllegalArgumentException.class);
+        station.setPrice(null, 0);
+        expectedException = ExpectedException.none();
+    }
+
+    @Test
+    public void testSetPriceFailZeroPrice() {
+        expectedException.expectMessage("Price must be > 0");
+        expectedException.expect(IllegalArgumentException.class);
+        station.setPrice(GasType.SUPER, 0);
+        expectedException = ExpectedException.none();
+    }
+
+    @Test
+    public void testAddGetGasPumps() {
+        Collection<GasPump> pumps = station.getGasPumps();
+        assertEquals(1, pumps.size());
+
+        station.addGasPump(new GasPump(GasType.REGULAR, pumpGasAmount));
+        pumps = station.getGasPumps();
+        assertEquals(2, pumps.size());
+
+        for (GasPump pump : pumps) {
+            Assert.assertEquals(GasType.REGULAR, pump.getGasType());
+            assertEquals(pumpGasAmount, pump.getRemainingAmount());
+        }
+    }
+
+    @Test
+    public void testGetGasPumpsUnmodifiable() {
+        Collection<GasPump> pumps = station.getGasPumps();
+        pumps.add(new GasPump(GasType.DIESEL, pumpGasAmount));
+
+        pumps = station.getGasPumps();
+        final GasPump pump = pumps.iterator().next();
+        assertEquals(1, pumps.size());
+        Assert.assertEquals(GasType.REGULAR, pump.getGasType());
     }
 }

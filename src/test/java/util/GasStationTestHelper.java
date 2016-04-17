@@ -11,7 +11,7 @@ import org.junit.Assert;
  * Created by esin on 17.04.2016.
  */
 public final class GasStationTestHelper {
-    public static final double DELTA = 1e-10;
+    public static final double DELTA = 1e-8;
 
     public static void assertEquals(double expected, double value) {
         Assert.assertEquals(expected, value, DELTA);

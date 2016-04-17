@@ -54,13 +54,16 @@ public class GasStationImpl implements GasStation {
     @Override
     @NotNull
     public List<GasPump> getGasPumps() {
-        return allPumps;
+        return new LinkedList<>(allPumps);
     }
 
     @Override
     public double buyGas(@Nullable GasType type, double amountInLiters, double maxPricePerLiter) throws NotEnoughGasException, GasTooExpensiveException {
         if (type == null) {
             throw new IllegalArgumentException("Gas type is null");
+        }
+        if (amountInLiters <= 0) {
+            throw new IllegalArgumentException("Amount must be > 0");
         }
         final double price = getPrice(type);
         if (price > maxPricePerLiter) {
