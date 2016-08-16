@@ -16,3 +16,5 @@ When customer wants to buy some gas, PumpManager gets pump with largest remainin
 The only two synchronized places in code are:
  * getting pump from managers queue and putting it back, so that managers queue is always consistent
  * setting gas price, due to `DoubleAdder` usage
+
+some master change
